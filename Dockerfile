@@ -19,4 +19,4 @@ ENV GITLAB_URL=https://gitlab.com
 ENV GITLAB_TOKEN=""
 
 # Run the server
-CMD ["fastmcp", "run", "src/gitlab_mcp_server/server.py:mcp"]
+CMD ["fastmcp", "run", "src/gitlab_mcp_server.py:mcp"]

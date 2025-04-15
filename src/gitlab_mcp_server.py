@@ -100,13 +100,15 @@ def create_merge_request(project_id: str, title: str, source_branch: str, target
     """Create a new merge request in a GitLab project"""
     gl = get_gitlab_client()
     project = gl.projects.get(project_id)
-    mr = project.mergerequests.create({
+    payload = {
         'title': title,
         'source_branch': source_branch,
         'target_branch': target_branch,
-        'description': description,
         'draft': draft
-    })
+    }
+    if description is not None:
+        payload['description'] = description
+    mr = project.mergerequests.create(payload)
     return {
         "id": mr.iid,
         "web_url": mr.web_url,
@@ -183,6 +185,17 @@ def create_merge_request_line_comment(
         "path": path,
         "line": line
     }
+
+@mcp.tool()
+def get_merge_request_diff(project_id: str, merge_request_iid: int) -> dict:
+    """Get the diff of a merge request to find valid line positions for comments."""
+    gl = get_gitlab_client()
+    project = gl.projects.get(project_id)
+    mr = project.mergerequests.get(int(merge_request_iid))
+    # Fetch the diff
+    diffs = mr.diffs.list()
+    # Return the diffs as a list of dicts (or as raw text if preferred)
+    return {"diffs": [diff.attributes for diff in diffs]}
 
 if __name__ == "__main__":
     mcp.run()
