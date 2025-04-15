@@ -1,0 +1,21 @@
+[project]
+name = "gitlab-mcp-server"
+version = "0.1.0"
+description = "MCP server for GitLab integration"
+requires-python = ">=3.10"
+dependencies = [
+    "fastmcp>=2.1.2",
+    "python-gitlab>=4.0.0",
+    "pydantic>=2.0.0",
+    "python-dotenv>=1.0.0"
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/gitlab_mcp_server"]
+
+[tool.ruff]
+line-length = 100
