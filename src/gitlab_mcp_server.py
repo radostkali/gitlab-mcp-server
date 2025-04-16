@@ -136,44 +136,22 @@ def create_issue(project_id: str, title: str, description: Optional[str] = None,
 def create_merge_request_line_comment(
     project_id: str,
     merge_request_iid: int,
-    path: str,
-    line: int,
-    content: str,
-    position_type: str = "text",
-    branch: Optional[str] = None
+    position: dict,
+    content: str
 ) -> dict:
     """Create a comment on a specific line in a merge request.
     
     Args:
         project_id: The ID or URL-encoded path of the project
         merge_request_iid: The internal ID of the merge request
-        path: The file path to comment on
-        line: The line number to comment on
+        position: The position data for the comment, including new_path and new_line
         content: The content of the comment
-        position_type: The type of position reference ("text" or "image")
-        branch: The branch name (defaults to the source branch of the MR)
     """
     gl = get_gitlab_client()
     project = gl.projects.get(project_id)
     mr = project.mergerequests.get(merge_request_iid)
     
-    if not branch:
-        branch = mr.source_branch
-        
-    # Get the latest commit SHA of the branch
-    commit = project.commits.list(ref_name=branch, per_page=1)[0]
-    
-    # Create position data for the comment
-    position = {
-        'base_sha': mr.diff_refs['base_sha'],
-        'start_sha': mr.diff_refs['start_sha'],
-        'head_sha': commit.id,
-        'position_type': position_type,
-        'new_path': path,
-        'new_line': line,
-    }
-    
-    # Create the comment
+    # Create the comment using the provided position data
     note = mr.discussions.create({
         'body': content,
         'position': position
@@ -181,9 +159,7 @@ def create_merge_request_line_comment(
     
     return {
         "id": note.id,
-        "body": content,
-        "path": path,
-        "line": line
+        "body": content
     }
 
 @mcp.tool()
@@ -191,11 +167,26 @@ def get_merge_request_diff(project_id: str, merge_request_iid: int) -> dict:
     """Get the diff of a merge request to find valid line positions for comments."""
     gl = get_gitlab_client()
     project = gl.projects.get(project_id)
-    mr = project.mergerequests.get(int(merge_request_iid))
-    # Fetch the diff
-    diffs = mr.diffs.list()
-    # Return the diffs as a list of dicts (or as raw text if preferred)
-    return {"diffs": [diff.attributes for diff in diffs]}
+    mr = project.mergerequests.get(merge_request_iid)
+    
+    # Get the diff refs
+    diff_refs = mr.diff_refs
+    
+    # Fetch the changes
+    changes = mr.changes()
+    
+    # Process the changes to include necessary information
+    diffs = []
+    for change in changes['changes']:
+        diff = {
+            'old_path': change['old_path'],
+            'new_path': change['new_path'],
+            'diff_refs': diff_refs,
+            'diff': change['diff']
+        }
+        diffs.append(diff)
+    
+    return {"diffs": diffs}
 
 if __name__ == "__main__":
     mcp.run()
