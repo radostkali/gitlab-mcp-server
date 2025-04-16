@@ -1,6 +1,8 @@
-# GitLab MCP Server
+# GitLab MCP Server (in Python)
 
 Model Context Protocol (MCP) server for GitLab integration, built on FastMCP.
+
+This server is implemented in Python, with fastmcp.
 
 ## Quick Start
 
