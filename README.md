@@ -111,3 +111,20 @@ Guidelines for conducting code reviews in the current branch, focusing on diffs 
 - Focus on both business logic and code quality.
 - Ensure all suggestions are justified and, where possible, reference best practices or project standards.
 - If you identify a bug, explain the reasoning and potential impact.
+
+## Contributing
+
+Feel free to:
+- Add new GitLab integration tools and features
+- Improve existing functionality
+- Fix bugs
+- Enhance documentation
+- Suggest improvements
+
+To contribute:
+1. Fork the repository
+2. Create your feature branch
+3. Commit your changes
+4. Open a Pull Request
+
+All contributions, big or small, are appreciated!
