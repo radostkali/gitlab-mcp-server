@@ -1,17 +1,17 @@
-# GitLab MCP Сервер
+# GitLab MCP Server
 
-Сервер протокола контекста модели (MCP) для интеграции с GitLab, построенный на FastMCP.
+Model Context Protocol (MCP) server for GitLab integration, built on FastMCP.
 
-## Быстрый старт
+## Quick Start
 
-1. Соберите Docker образ:
+1. Build the Docker image:
 ```bash
 docker build -t gitlab-mcp-server .
 ```
 
-## Интеграция с Cursor AI
+## Integration with Cursor/Claude
 
-В настройках MCP -> Добавить MCP сервер, туда закидывается конфиг:
+In MCP Settings -> Add MCP server, add this config:
 
 ```json
 {
@@ -37,21 +37,21 @@ docker build -t gitlab-mcp-server .
 }
 ```
 
-Примечание: Не забудьте заменить значения `GITLAB_TOKEN` и `GITLAB_URL` на ваши реальные учетные данные GitLab и URL вашего экземпляра. 
+Note: Don't forget to replace `GITLAB_TOKEN` and `GITLAB_URL` values with your actual GitLab credentials and instance URL.
 
-## Получение GitLab токена
+## Getting GitLab Token
 
-1. Войдите в свой аккаунт GitLab
-2. Перейдите в Settings -> Access Tokens
-3. Создайте новый токен:
-   - Scopes: выберите необходимые разрешения:
-     - `api` - для доступа к API
-     - `read_repository` - для чтения репозиториев
-     - `write_repository` - для записи в репозитории
-4. Нажмите "Create personal access token"
-5. Скопируйте сгенерированный токен (он будет показан только один раз!)
+1. Log in to your GitLab account
+2. Go to Settings -> Access Tokens
+3. Create a new token:
+   - Scopes: select the necessary permissions:
+     - `api` - for API access
+     - `read_repository` - for reading repositories
+     - `write_repository` - for writing to repositories
+4. Click "Create personal access token"
+5. Copy the generated token (it will be shown only once!)
 
-## Промт (rule) для ревью
+## Prompt (rule) for review
 
 Here are some suggestions to improve and clarify your review.mdc rules for code review:
 
@@ -97,7 +97,7 @@ Guidelines for conducting code reviews in the current branch, focusing on diffs 
 
 - Propose to post line comments with suggestions directly in the Merge Request using the MCP GitLab server.
 - All line comments in Merge Request must:
-  - Begin with “[AI]”.
+  - Begin with "[AI]".
   - Be specific, actionable, and reference the relevant code line(s).
   - Do not write a lot of text. Smaller is better.
 
