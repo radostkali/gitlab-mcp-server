@@ -30,7 +30,7 @@ docker build -t gitlab-mcp-server .
       ],
       "env": {
         "GITLAB_TOKEN": "token",
-        "GITLAB_URL": "https://mimimi.ninja/"
+        "GITLAB_URL": "https://gitlab.com/"
       }
     }
   }
